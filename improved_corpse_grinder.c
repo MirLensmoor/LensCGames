@@ -3,12 +3,16 @@ program improved_corpse_grinder(char)
 #include 146008
 #include 271001
 #include 271002
+#include 271004
 #include 271014 /*zombie plushies */
  main()
  {
   char ch = self;
+  bool GV_DEBUG_ENABLE = false;
   obj cg = get_obj_room(ch,"@cg");
   string chname = ch_getstring(ch,CHAR_STRING_NAME);
+  
+  int GLOBAL_DATA_VNUM = 271017;
   obj corpse = get_obj_carry(ch,"corpse");
  
   if (!is_valid_obj(corpse))
@@ -54,9 +58,9 @@ if (x < 1)
  int i = random(0,100);
 if (i <= 50)
  {
-  i= random(0,100);
+  i = random(0,100);
    if (i >= 75)
-    {
+    { 
         make_token(ch,cg);
        }
      }
@@ -83,7 +87,7 @@ if (i <= 50)
   {
    make_pcoin(ch,cg);
    }
- 
+ AddPoint(GLOBAL_DATA_VNUM, chname);
  invalidate extract_object(corpse);
  }
  

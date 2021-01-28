@@ -1,9 +1,6 @@
 program CorpsegrinderInitv2(char)
 
-function gmsg (string msg)
-{
-  send_channel(msg, CHANNEL_GAMES);
-}
+#include 271004
 
 main()
 {
@@ -13,6 +10,7 @@ int i,time,iscore;
 string imm = ch_getstring(self,CHAR_STRING_NAME);
 argument = first_word(argument,WORD_REST);
 int time = atoi(argument);
+int GLOBAL_DATA_VNUM = 271017;
  if (string_is_empty(argument))
   {
    sendt(self,"Please supply a duration time in minutes.\r\n");
@@ -48,7 +46,75 @@ while(time>=0)
    }
    time--;
  }
-send_channel("Corpsegrinder has ended!",CHANNEL_GAMES);
-invalidate extract_object(lbin);
-invalidate extract_object(abin);
+  //disable scoring of points
+  else
+  {
+	game_set_memory_value(GLOBAL_DATA_VNUM, 0);
+    qmsg("The quest has ended!");
+  }
+  
+  //Print scoreboard
+  qmsg("---- Scoreboard ----");
+  
+  int scorelist[64];
+  string namelist[64];
+  string Read = game_get_memory_string(GLOBAL_DATA_VNUM);
+  string Line = "";
+  
+  int iter = 0;
+  
+  while (!string_is_empty(Read))
+  {
+    /* Get the first line from the desc */
+    Line = first_word(Read, WORD_FIRST);
+    /* Update the Read var to shave off the line we parse*/
+    Read = first_word(Read, WORD_REST);
+    
+    /* Fetch the name */
+    string LineUser = first_word(Line,WORD_FIRST);
+    Line = first_word(Line,WORD_REST);
+    namelist[iter]  = LineUser;
+    scorelist[iter] = atoi(Line);
+    iter++;
+  }
+  
+
+  DEBUG("Sorting...\n\r");
+  
+  string tempname;
+  int tempscore;
+  int i, j, temp;
+  
+  for (i = 0; i < (iter - 1); ++i)
+  {
+    for (j = 0; j < iter - 1 - i; ++j )
+    {
+      if (scorelist[j] < scorelist[j+1])
+      {
+        tempscore = scorelist[j+1];
+        scorelist[j+1] = scorelist[j];
+        scorelist[j] = tempscore;
+        
+        tempname = namelist[j+1];
+        namelist[j+1] = namelist[j];
+        namelist[j] = tempname;
+      }
+    }
+  }
+  DEBUG("Sorting done.");
+  
+  DEBUG("Printing list.");
+  int total = 0;
+  for(i=0;i<iter;i++)
+  {
+    qmsg(fpad(namelist[i],14) + "   " + pad(scorelist[i],3));
+    total += scorelist[i];
+  }
+  qmsg("--------------------");
+  qmsg(fpad("Total",14) + "   " + pad(total,3));
+  game_clear_memory(GLOBAL_DATA_VNUM); /* No need to store the scoreboard */
+  interpret(score_mob, "mobact extract");
+  send_channel("Corpsegrinder has ended!",CHANNEL_GAMES);
+  invalidate extract_object(lbin);
+  invalidate extract_object(abin);
 }
