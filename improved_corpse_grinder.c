@@ -64,11 +64,11 @@ if (i <= 50)
         make_token(ch,cg);
        }
      }
-    else make_cupie(ch,cg);
+    else make_cupiev2(ch,cg);
    }
    if (x > 0 && x <= 45)
   {
-   make_cupie(ch,cg); }
+   make_cupiev2(ch,cg); }
  
    if (x > 45 && x <= 60)
   {
@@ -80,7 +80,7 @@ if (i <= 50)
      {    
       make_plushie(ch,cg); 
      }
-     else make_cupie(ch,cg);
+     else make_cupiev2(ch,cg);
    }
  
    if (x > 70)
