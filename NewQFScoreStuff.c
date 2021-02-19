@@ -38,6 +38,8 @@ function int StoreQP(int DATA_VNUM, char ch_registrant){
     bool re_register=FALSE;
     while (!string_is_empty(Read))
     {
+		
+	  
       /* Get the first line from the desc */
       Line = first_word(Read, WORD_FIRST);
       /* Save the line in case we dont want to change it */
@@ -51,10 +53,12 @@ function int StoreQP(int DATA_VNUM, char ch_registrant){
 	  strQP = first_word(Line,WORD_FIRST);
 	  Line = first_word(Line,WORD_REST);
 	  oldScore = first_word(Line,WORD_REST);
-	  LOGWIZ("Line Value #1 [" + Line + "]");
-	  Score = atoi(strQP) - QuestPointCount + atoi(oldScore);
+	  LOGWIZ("Line Value #1 [" + Line + "]"); 
+	  
       if (LineUser == NewUser)
       {
+		LOGWIZ("Line 60");
+		Score = QuestPointCount - atoi(strQP) + atoi(oldScore);
         re_register = TRUE;
         Line = "" + LineUser + " " + QuestPointCount + " " + get_systime() + " " + Score;
       }else{
@@ -65,6 +69,7 @@ function int StoreQP(int DATA_VNUM, char ch_registrant){
     
     if (!re_register)
     {
+	 LOGWIZ("Line 71");
       Write += "'" + NewUser 
             +  " " + QuestPointCount 
             + " " + get_systime() 
@@ -74,12 +79,12 @@ function int StoreQP(int DATA_VNUM, char ch_registrant){
     if(!re_register 
    || (re_register && QF_ALLOW_REREGISTER)
    || DATA_VNUM == QF_QP_FINISH_STORE){
+	  LOGWIZ("Line 81");
       game_set_memory(DATA_VNUM, 1, Write);
       return QuestPointCount;
     }
     return -1;
 }
-
 function string GetTime()
 {
   int t = get_systime();
@@ -224,4 +229,3 @@ main()
     break;
   }
 }
-
