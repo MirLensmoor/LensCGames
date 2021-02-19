@@ -1,3 +1,15 @@
+bool GV_DEBUG_ENABLE = FALSE;
+
+function string fpad(string d,int count)
+{
+  string str = "";
+  str += d;
+  while(string_length(str)<count)
+  {
+    str = str + " ";
+  }
+  return str;
+}
 function DEBUG(string s)
 {
   if(GV_DEBUG_ENABLE){
@@ -22,6 +34,10 @@ function string snip (string input) {
 function qmsg (string msg)
 {
   send_channel(msg, CHANNEL_QUEST);
+}
+function gmsg (string msg)
+{
+  send_channel(msg, CHANNEL_GAMES);
 }
 
 function game_set_memory_string(int vnum, string msg)

@@ -8,12 +8,15 @@ program improved_corpse_grinder(char)
  main()
  {
   char ch = self;
-  bool GV_DEBUG_ENABLE = false;
+  bool GV_DEBUG_ENABLE = FALSE;
   obj cg = get_obj_room(ch,"@cg");
   string chname = ch_getstring(ch,CHAR_STRING_NAME);
   
+  
   int GLOBAL_DATA_VNUM = 271017;
   obj corpse = get_obj_carry(ch,"corpse");
+  string crpname = obj_getstring(corpse,OBJ_STRING_SHORT_DESCR);
+  int slaupoint = obj_getval(corpse,OBJ_VAL_LEVEL);
  
   if (!is_valid_obj(corpse))
    { 
@@ -50,6 +53,9 @@ program improved_corpse_grinder(char)
      +"I don't think so, you pansy!\r\n");
      end;
     }
+	
+sendt(ch, "You grind up "+crpname+" and receive "+slaupoint+" slaughter points!\r\	n");
+gmsg("TEST: " + chname + " has received " + slaupoint + " slaughter points!\r\n");
  
   int x = random(0,100);
   
@@ -64,11 +70,11 @@ if (i <= 50)
         make_token(ch,cg);
        }
      }
-    else make_cupiev2(ch,cg);
+    else make_cupie(ch,cg);
    }
    if (x > 0 && x <= 45)
   {
-   make_cupiev2(ch,cg); }
+   make_cupie(ch,cg); }
  
    if (x > 45 && x <= 60)
   {
@@ -80,7 +86,7 @@ if (i <= 50)
      {    
       make_plushie(ch,cg); 
      }
-     else make_cupiev2(ch,cg);
+     else make_cupie(ch,cg);
    }
  
    if (x > 70)
